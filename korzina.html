@@ -1,0 +1,303 @@
+<html lang="ru">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Корзина - Парфюмерия
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6f2;
+            background-image: url('https://i.pinimg.com/originals/36/8c/61/368c6164370c3726248594334bb16568.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        header {
+            background-color: rgba(255, 102, 178, 0.9);
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        header img {
+            max-height: 50px;
+            margin-right: 10px;
+        }
+        .contact-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .contact-info i {
+            margin-right: 5px;
+        }
+        .cart {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .cart i {
+            margin-right: 5px;
+        }
+        nav {
+            background-color: rgba(255, 153, 204, 0.9);
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+        nav .nav-links {
+            display: flex;
+        }
+        nav a {
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: rgba(255, 204, 221, 0.9);
+            color: black;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+        .search-bar button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff66b2;
+            color: #fff;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #ff99cc;
+        }
+        .container {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            margin: 20px;
+        }
+        .cart-item {
+            background-color: #fff;
+            border: 1px solid #ff99cc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-item img {
+            max-width: 100px;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        .cart-item h2 {
+            margin: 0 0 10px;
+            color: #ff66b2;
+        }
+        .cart-item p {
+            margin: 0 0 10px;
+        }
+        .cart-item .price {
+            font-size: 1.2em;
+            color: #ff66b2;
+        }
+        .cart-item .actions {
+            display: flex;
+            align-items: center;
+        }
+        .cart-item .actions input {
+            width: 50px;
+            padding: 5px;
+            margin-right: 10px;
+            border: 1px solid #ff99cc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .cart-item .actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff66b2;
+            color: #fff;
+            cursor: pointer;
+        }
+        .cart-item .actions button:hover {
+            background-color: #ff99cc;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.5em;
+            color: #ff66b2;
+            margin-top: 20px;
+        }
+        .checkout {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .checkout button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff66b2;
+            color: #fff;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .checkout button:hover {
+            background-color: #ff99cc;
+        }
+        footer {
+            background-color: rgba(255, 102, 178, 0.9);
+            color: #fff;
+            text-align: center;
+            padding: 3px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            font-size: 0.7em;
+        }
+  </style>
+ </head>
+ <body>
+  <header>
+   <div class="contact-info">
+    <i class="fas fa-phone-alt">
+    </i>
+    <span>
+     +7 (123) 456-78-90
+    </span>
+   </div>
+   <h1>
+    <img alt="Логотип магазина парфюмерии" height="50" src="images/логотип для духов.png" width="50"/>
+    Парфюмерия
+   </h1>
+   <div class="cart">
+    <i class="fas fa-shopping-cart">
+    </i>
+   </div>
+  </header>
+  <nav>
+   <div class="nav-links">
+    <a href="inbex.html">
+     Главная
+    </a>
+    <a href="#products">
+     Продукты
+    </a>
+    <a href="#about">
+     О нас
+    </a>
+    <a href="#contact">
+     Контакты
+    </a>
+   </div>
+   <div class="search-bar">
+    <input placeholder="Поиск..." type="text"/>
+    <button type="button">
+     Поиск
+    </button>
+   </div>
+  </nav>
+  <div class="container">
+   <div class="cart-item">
+    <div class="item-info">
+     <img alt="Флакон парфюма с золотой крышкой и элегантным дизайном" height="100" src="https://storage.googleapis.com/a1aa/image/48fRBRGuMX2nBSOx7UqJmf1fFqJSskdyJlnCH12mtbH25canA.jpg" width="100"/>
+     <div>
+      <h2>
+       Парфюм 1
+      </h2>
+      <p class="price">
+       Цена: 5000 руб.
+      </p>
+     </div>
+    </div>
+    <div class="actions">
+     <input min="1" type="number" value="1"/>
+     <button type="button">
+      Удалить
+     </button>
+    </div>
+   </div>
+   <div class="cart-item">
+    <div class="item-info">
+     <img alt="Флакон парфюма с серебряной крышкой и элегантным дизайном" height="100" src="https://storage.googleapis.com/a1aa/image/8Fu1HBgG2EavId3uJDL0lwizbjitjc5eolDZDRP65SqcOn2JA.jpg" width="100"/>
+     <div>
+      <h2>
+       Парфюм 2
+      </h2>
+      <p class="price">
+       Цена: 6000 руб.
+      </p>
+     </div>
+    </div>
+    <div class="actions">
+     <input min="1" type="number" value="1"/>
+     <button type="button">
+      Удалить
+     </button>
+    </div>
+   </div>
+   <div class="cart-item">
+    <div class="item-info">
+     <img alt="Флакон парфюма с черной крышкой и элегантным дизайном" height="100" src="https://storage.googleapis.com/a1aa/image/IXa6sgTYBe3eNkq6m9hIhtb8H3Bfswwo0PCKxZU931c45canA.jpg" width="100"/>
+     <div>
+      <h2>
+       Парфюм 3
+      </h2>
+      <p class="price">
+       Цена: 5500 руб.
+      </p>
+     </div>
+    </div>
+    <div class="actions">
+     <input min="1" type="number" value="1"/>
+     <button type="button">
+      Удалить
+     </button>
+    </div>
+   </div>
+   <div class="total">
+    Итого: 16500 руб.
+   </div>
+   <div class="checkout">
+    <button type="button">
+     <a href="zakaz.html">Оформить заказ</a> 
+    </button>
+   </div>
+  </div>
+  <footer>
+   <p>
+    © 2023 Магазин Парфюмерии. Все права защищены.
+   </p>
+  </footer>
+ </body>
+</html>
