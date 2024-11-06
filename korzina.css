@@ -1,0 +1,189 @@
+body {
+    background-image: url('https://i.pinimg.com/originals/36/8c/61/368c6164370c3726248594334bb16568.jpg');
+    background-size: cover; /* Заполнение всего экрана */
+    background-position: center; /* Центрирование изображения */
+    background-repeat: no-repeat; /* Запрет повторения изображения */
+    font-family: 'Roboto', sans-serif; /* Шрифт для всего сайта */
+}
+
+.container {
+    background-color: rgba(255, 255, 255,); /* Полупрозрачный белый фон для контейнера */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 1px; /* Закругленные углы */
+}
+
+
+header {
+    background-color: #000000;
+    border-radius: 10px;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+.header-background {
+    background-image: url('images/IwKv-Ln8gCE.jpg'); /* Укажите путь к вашему изображению */
+    background-size: contain; /* Заполнение всего экрана */
+    background-position: center; /* Центрирование изображения */
+    background-repeat: no-repeat; /* Запрет повторения изображения */
+    padding: 50px; /* Внутренние отступы */
+    transition: background-color 0.3s ease; /* Плавный переход для изменения цвета фона */
+}
+
+/* Стили для изменения фона при наведении */
+.header-background:hover {
+    background-color: #ff69b4; /* Белый фон при наведении */
+}
+
+.contact-info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+}
+.contact-info i {
+    margin-right: 5px;
+}
+.cart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+.cart i {
+    margin-right: 5px;
+}
+nav {
+    background-color: rgba(255, 153, 204, 0.9);
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+nav .nav-links {
+    display: flex;
+}
+nav a {
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+nav a:hover {
+    background-color: rgba(255, 204, 221, 0.9);
+    color: black;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+.search-bar input {
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+.search-bar button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff66b2;
+    color: #fff;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.search-bar button:hover {
+    background-color: #ff99cc;
+}
+.container {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    margin: 20px;
+}
+.cart-item {
+    background-color: #fff;
+    border: 1px solid #ff99cc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.cart-item img {
+    max-width: 100px;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+.cart-item h2 {
+    margin: 0 0 10px;
+    color: #ff66b2;
+}
+.cart-item p {
+    margin: 0 0 10px;
+}
+.cart-item .price {
+    font-size: 1.2em;
+    color: #ff66b2;
+}
+.cart-item .actions {
+    display: flex;
+    align-items: center;
+}
+.cart-item .actions input {
+    width: 50px;
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ff99cc;
+    border-radius: 5px;
+    text-align: center;
+}
+.cart-item .actions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff66b2;
+    color: #fff;
+    cursor: pointer;
+}
+.cart-item .actions button:hover {
+    background-color: #ff99cc;
+}
+.total {
+    text-align: right;
+    font-size: 1.5em;
+    color: #ff66b2;
+    margin-top: 20px;
+}
+.checkout {
+    text-align: right;
+    margin-top: 20px;
+}
+.checkout button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff66b2;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+}
+.checkout button:hover {
+    background-color: #ff99cc;
+}
+footer {
+    background-color: rgba(255, 102, 178, 0.9);
+    color: #fff;
+    text-align: center;
+    padding: 3px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    font-size: 0.7em;
+}
