@@ -3,11 +3,12 @@ let cart = [];
 
 function fetchData() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://109.120.155.144/products', true);
+    xhr.open('GET', 'http://109.120.155.144:80/products', true);
     xhr.onload = function() {
         if (xhr.status === 200) {
             const products = JSON.parse(xhr.responseText);
-
+            localStorage.setItem('products', JSON.stringify(products));
+            
             if (Array.isArray(products)) {
                 const content = document.getElementById('content');
                 content.innerHTML = '';
@@ -26,7 +27,7 @@ function fetchData() {
                             <p>Описание: <span class="font-semibold">${product.description}</span></p>
                             <p>Количество: <span class="font-semibold">${product.quantity}</span></p>
                         </div>
-                        <button class="add-to-cart" data-id="${product.id}">Добавить в корзину</button>
+                        <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Добавить в корзину</button>
                     `;
 
                     // Добавляем обработчик события для кнопки "Добавить в корзину"
@@ -46,46 +47,19 @@ function fetchData() {
     };
     xhr.send();
 }
-
+let cartId = 1;
 // Функция для добавления товара в корзину
 function addToCart(product) {
-    cart.push(product);
-    alert(`${product.name} добавлен в корзину!`);
-    console.log('Товары в корзине:', cart);
+    console.log('Product to add:', product); // Логируем продукт
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://109.120.155.144:80/carts', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+        id: cartId, // Здесь используем идентификатор корзины
+        quantity: product.quantity,
+        product: product.id, // Здесь используем идентификатор продукта
+    }));
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const product = button.parentElement;
-            const productId = product.getAttribute('data-id');
-            const productName = product.getAttribute('data-name');
-            const productPrice = product.getAttribute('data-price');
-
-            const cartItem = {
-                id: productId,
-                name: productName,
-                price: productPrice,
-            };
-
-            // Получаем текущую корзину из localStorage
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Проверяем, есть ли уже этот товар в корзине
-            const existingProduct = cart.find(item => item.id === productId);
-            if (existingProduct) {
-                existingProduct.quantity += 1; // Увеличиваем количество
-            } else {
-                cart.push({ ...cartItem, quantity: 1 }); // Добавляем новый товар
-            }
-
-            // Сохраняем обновленную корзину в localStorage
-            localStorage.setItem('cart', JSON.stringify(cart));
-            alert(`${productName} добавлен в корзину!`);
-        });
-    });
-});
 
 // Вызов функции для получения данных
 fetchData();

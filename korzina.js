@@ -1,69 +1,127 @@
-// korzina.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    const cartItemsContainer = document.getElementById('cart-items');
-    const totalContainer = document.getElementById('total');
+    const contentContainer = document.getElementById('content');
     const checkoutButton = document.getElementById('checkout-button');
-    let cart = []; // Инициализируем массив корзины
+    let cart = [];
+    let cartId; // Добавляем переменную для хранения ID корзины
 
-    // Получаем корзину из localStorage
-    function fetchData() {
+    function getCartFromServer() {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://109.120.155.144/carts', true);
+        xhr.open('GET', 'http://109.120.155.144:80/carts', true);
+        
         xhr.onload = function() {
             if (xhr.status === 200) {
-                cart = JSON.parse(xhr.responseText); // Предполагаем, что сервер возвращает JSON
-                displayCartItems(); // Отображаем товары в корзине после получения данных
+                const serverCart = JSON.parse(xhr.responseText);
+                if (serverCart.length > 0) {
+                    cartId = serverCart[0].id; // Сохраняем ID корзины
+                }
+                const productIds = serverCart.map(item => item.product);
+                displayCartItems(productIds);
             } else {
-                console.error('Ошибка при загрузке данных корзины:', xhr.statusText);
+                console.error('Ошибка получения корзины с сервера');
             }
         };
+
         xhr.onerror = function() {
             console.error('Ошибка соединения с сервером');
         };
+
         xhr.send();
     }
 
-    // Функция для отображения товаров в корзине
-    function displayCartItems() {
-        cartItemsContainer.innerHTML = ''; // Очищаем контейнер
+    function displayCartItems(serverProductIds) {
+        const savedProducts = JSON.parse(localStorage.getItem('products')) || [];
+        cart = savedProducts.filter(product => serverProductIds.includes(product.id));
+        
+        contentContainer.innerHTML = '';
 
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Корзина пуста.</p>';
-            totalContainer.innerHTML = '';
+            contentContainer.innerHTML = '<p>Корзина пуста</p>';
             return;
         }
 
-        let total = 0;
-
         cart.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('cart-item');
-            itemDiv.innerHTML = `
-                <h2>${item.name}</h2>
-                <p>Цена: ${item.price} ₽</p>
-                <p>Количество: ${item.quantity}</p>
+            const itemElement = document.createElement('div');
+            itemElement.className = 'cart-item';
+            itemElement.innerHTML = `
+                <div class="product-card">
+                    <img src="${item.photo_url}" alt="${item.name}" class="product-image">
+                    <div class="product-info">
+                        <h3>${item.name}</h3>
+                    </div>
+                </div>
             `;
-            cartItemsContainer.appendChild(itemDiv);
-            total += item.price * item.quantity; // Считаем общую стоимость
+            contentContainer.appendChild(itemElement);
         });
 
-        totalContainer.innerHTML = `Общая сумма: ${total} ₽`;
+        // Добавляем кнопку "Очистить корзину"
+        const clearCartButton = document.createElement('button');
+        clearCartButton.textContent = 'Очистить корзину';
+        clearCartButton.addEventListener('click', clearCart);
+        contentContainer.appendChild(clearCartButton);
     }
 
-    // Обработчик для оформления заказа
+    function clearCart() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://109.120.155.144:80/carts', true);
+        
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const cartItems = JSON.parse(xhr.responseText);
+                if (cartItems.length > 0) {
+                    // Удаляем каждый товар из корзины
+                    cartItems.forEach(item => {
+                        deleteCartItem(item.id);
+                    });
+                } else {
+                    console.log('Корзина уже пуста');
+                    updateCartDisplay();
+                }
+            } else {
+                console.error('Ошибка получения корзины:', xhr.statusText);
+            }
+        };
+    
+        xhr.onerror = function() {
+            console.error('Ошибка соединения с сервером');
+        };
+    
+        xhr.send();
+    }
+    
+    function deleteCartItem(itemId) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('DELETE', `http://109.120.155.144:80/carts/${itemId}`, true);
+        
+        xhr.onload = function() {
+            if (xhr.status === 200 || xhr.status === 204) {
+                console.log(`Товар с ID ${itemId} удален из корзины`);
+                updateCartDisplay();
+            } else {
+                console.error(`Ошибка удаления товара с ID ${itemId}:`, xhr.statusText);
+            }
+        };
+    
+        xhr.onerror = function() {
+            console.error('Ошибка соединения с сервером');
+        };
+    
+        xhr.send();
+    }
+    
+    function updateCartDisplay() {
+        // Обновляем отображение корзины
+        getCartFromServer();
+    }
+
+    // Обработчик кнопки "Оформить заказ"
     checkoutButton.addEventListener('click', () => {
-        if (cart.length === 0) {
-            alert('Корзина пуста. Добавьте товары перед оформлением заказа.');
+        if (cart.length > 0) {
+            window.location.href = 'zakaz.html';
         } else {
-            alert('Спасибо за ваш заказ!');
-            // Здесь можно добавить логику для оформления заказа
-            localStorage.removeItem('cart'); // Очищаем корзину после оформления
-            cart = []; // Обнуляем массив корзины
-            displayCartItems(); // Обновляем отображение корзины
+            alert('Корзина пуста!');
         }
     });
 
-    // Загружаем данные корзины при загрузке страницы
-    fetchData();
+    // Загружаем корзину при загрузке страницы
+    getCartFromServer();
 });
