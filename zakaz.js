@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function getCartFromServer() {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://109.120.155.144:80/carts', true);
+            xhr.open('GET', 'http://109.120.155.144:80/carts', true); // Используем HTTP
             
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     const serverCart = JSON.parse(xhr.responseText);
+                    console.log('Полученные данные корзины с сервера:', serverCart);
                     resolve(serverCart);
                 } else {
                     reject('Ошибка получения корзины с сервера');
@@ -29,61 +30,38 @@ document.addEventListener('DOMContentLoaded', () => {
     function sendOrder(orderData) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'http://109.120.155.144:80/orders', true);
+            xhr.open('POST', 'http://109.120.155.144:80/orders', true); // Используем HTTP
             xhr.setRequestHeader('Content-Type', 'application/json');
-
+    
+            console.log('Отправляемые данные:', JSON.stringify(orderData));
+    
             xhr.onload = function() {
                 if (xhr.status === 201) {
                     resolve('Заказ успешно отправлен');
                 } else {
-                    reject('Ошибка отправки заказа');
+                    reject('Ошибка отправки заказа: ' + xhr.responseText);
                 }
             };
-
+    
             xhr.onerror = function() {
                 reject('Ошибка соединения с сервером');
             };
-
+    
             xhr.send(JSON.stringify(orderData));
         });
     }
 
-    // Очистка корзины после успешного заказа
-    function clearCart() {
+    // Очищаем корзину на сервере
+    function clearCartOnServer() {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://109.120.155.144:80/carts', true);
+            xhr.open('DELETE', 'http://109.120.155.144:80/carts', true); // Используем HTTP
             
             xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const cartItems = JSON.parse(xhr.responseText);
-                    const deletePromises = cartItems.map(item => deleteCartItem(item.id));
-                    Promise.all(deletePromises)
-                        .then(() => resolve('Корзина очищена'))
-                        .catch(error => reject(error));
+                if (xhr.status === 204) { // Успешное удаление
+                    resolve('Корзина успешно очищена');
                 } else {
-                    reject('Ошибка получения корзины');
-                }
-            };
-
-            xhr.onerror = function() {
-                reject('Ошибка соединения с сервером');
-            };
-
-            xhr.send();
-        });
-    }
-
-    function deleteCartItem(itemId) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('DELETE', `http://109.120.155.144:80/carts/${itemId}`, true);
-            
-            xhr.onload = function() {
-                if (xhr.status === 200 || xhr.status === 204) {
-                    resolve(`Товар с ID ${itemId} удален из корзины`);
-                } else {
-                    reject(`Ошибка удаления товара с ID ${itemId}`);
+                    reject('Ошибка очистки корзины: ' + xhr.responseText);
                 }
             };
 
@@ -101,14 +79,21 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Получаем данные корзины
             cart = await getCartFromServer();
+            console.log('Данные корзины:', cart);
+
+            // Проверяем, не пуста ли корзина
+            if (cart.length === 0) {
+                alert('Корзина пуста. Пожалуйста, добавьте товары перед оформлением заказа.');
+                return;
+            }
 
             // Собираем данные формы
             const formData = new FormData(orderForm);
             const orderData = {
                 name: formData.get('name'),
                 email: formData.get('email'),
-                phone: formData.get('phone'),
-                address: formData.get('address'),
+                phone_number: formData.get('phone'), // Изменено на phone_number
+                delivery_address: formData.get('address'), // Изменено на delivery_address
                 items: cart.map(item => ({
                     product_id: item.product,
                     quantity: item.quantity || 1
@@ -118,14 +103,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // Отправляем заказ
             await sendOrder(orderData);
 
-            // Очищаем корзину
-            await clearCart();
+            // Очищаем корзину на сервере
+            await clearCartOnServer();
 
-            // Перенаправляем на страницу успешного оформления заказа
-            window.location.href = 'yspex.html';
-        } catch (error) {
-            console.error('Ошибка при оформлении заказа:', error);
-            alert('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.');
-        }
-    });
-});
+            // Обновляем локальную корзину
+            cart = []; // Очищаем локальную переменную корзины
+
+                        // Перенаправляем на страницу успешного оформления заказа
+                        alert('Ваш заказ успешно оформлен!'); // Сообщение об успешном заказе
+                        window.location.href = 'yspex.html';
+                    } catch (error) {
+                        console.error('Ошибка при оформлении заказа:', error);
+                        alert('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте еще раз.');
+                    }
+                });
+            });
