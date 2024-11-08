@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentContainer = document.getElementById('content');
     const checkoutButton = document.getElementById('checkout-button');
     let cart = [];
-    let cartId; // Добавляем переменную для хранения ID корзины
+    let cartId;
 
     function getCartFromServer() {
         const xhr = new XMLHttpRequest();
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (xhr.status === 200) {
                 const serverCart = JSON.parse(xhr.responseText);
                 if (serverCart.length > 0) {
-                    cartId = serverCart[0].id; // Сохраняем ID корзины
+                    cartId = serverCart[0].id;
                 }
                 const productIds = serverCart.map(item => item.product);
                 displayCartItems(productIds);
@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cart = savedProducts.filter(product => serverProductIds.includes(product.id));
         
         contentContainer.innerHTML = '';
+        contentContainer.style.position = 'relative';
 
         if (cart.length === 0) {
             contentContainer.innerHTML = '<p>Корзина пуста</p>';
@@ -53,10 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
             contentContainer.appendChild(itemElement);
         });
 
-        // Добавляем кнопку "Очистить корзину"
         const clearCartButton = document.createElement('button');
         clearCartButton.textContent = 'Очистить корзину';
         clearCartButton.addEventListener('click', clearCart);
+        clearCartButton.style.position = 'absolute';
+        clearCartButton.style.right = '20px';
+        clearCartButton.style.top = '20px';
+        clearCartButton.style.padding = '5px 10px';
+        clearCartButton.style.border = 'none';
+        clearCartButton.style.borderRadius = '5px';
+        clearCartButton.style.backgroundColor = '#ff0000';
+        clearCartButton.style.color = '#ffffff';
+        clearCartButton.style.cursor = 'pointer';
+        clearCartButton.style.fontSize = '12px';
+        clearCartButton.style.fontWeight = 'bold';
+        clearCartButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
+        clearCartButton.style.transition = 'background-color 0.3s ease';
+
+        clearCartButton.addEventListener('mouseover', () => {
+            clearCartButton.style.backgroundColor = '#cc0000';
+        });
+        clearCartButton.addEventListener('mouseout', () => {
+            clearCartButton.style.backgroundColor = '#ff0000';
+        });
+
         contentContainer.appendChild(clearCartButton);
     }
 
@@ -68,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (xhr.status === 200) {
                 const cartItems = JSON.parse(xhr.responseText);
                 if (cartItems.length > 0) {
-                    // Удаляем каждый товар из корзины
                     cartItems.forEach(item => {
                         deleteCartItem(item.id);
                     });
@@ -109,11 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function updateCartDisplay() {
-        // Обновляем отображение корзины
         getCartFromServer();
     }
 
-    // Обработчик кнопки "Оформить заказ"
     checkoutButton.addEventListener('click', () => {
         if (cart.length > 0) {
             window.location.href = 'zakaz.html';
@@ -122,6 +140,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Загружаем корзину при загрузке страницы
     getCartFromServer();
 });
